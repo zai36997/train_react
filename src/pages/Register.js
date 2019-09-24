@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string()
@@ -17,6 +19,22 @@ const SignupSchema = Yup.object().shape({
 });
 
 export default class Resgister extends Component {
+  register = async values => {
+    try {
+      //    console.log(values)
+      const apiUrl = "https://zzaaii.herokuapp.com/api/user/register";
+      const response = await axios.post(apiUrl, values);
+      //   console.log(response.data);
+      if (response.status === 201) {
+        alert("ลงทะเบียนสำเร็จ");
+      } else if (response.status === 201) {
+        alert("อีเมลซ้ำ");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   render() {
     return (
       <>
@@ -33,6 +51,7 @@ export default class Resgister extends Component {
                 validationSchema={SignupSchema}
                 onSubmit={values => {
                   // same shape as initial values
+                  this.register(values);
                   console.log(values);
                 }}
               >

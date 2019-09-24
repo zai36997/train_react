@@ -1,11 +1,46 @@
 import React, { Component } from 'react'
-
+import axios from 'axios'
+import {Link} from 'react-router-dom'
 export default class Home extends Component {
+  CancelToken = axios.CancelToken;
+  source = this.CancelToken.source();
+  state = {
+    shops: []
+  }
+
+componentDidMount(){
+this.getData()
+}
+
+getData = async() =>  {
+try {
+  const shopUrl = 'https://zzaaii.herokuapp.com/api/shop'
+  const response = await axios.get(shopUrl,{
+    cancelToken: this.source.token
+  })
+  this.setState({
+    shops: response.data.data
+  })
+  console.log(response.data.data)
+} catch (error) {
+  if (axios.isCancel(this.thrown)) {
+    console.log('Request canceled', this.thrown.message);
+  } else {
+    console.error(error);
+  }
+ 
+  
+}
+}
+
+componentWillUnmount(){
+  this.source.cancel()
+}
+
     render() {
         return (
             <>
-                 <main role="main">
-    {/* Main jumbotron for a primary marketing message or call to action */}
+  <main role="main">
     <div className="jumbotron">
       <div className="container">
         <h1 className="display-3">Hello, world!</h1>
@@ -14,28 +49,33 @@ export default class Home extends Component {
       </div>
     </div>
     <div className="container">
-      {/* Example row of columns */}
-      <div className="row">
-        <div className="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a className="btn btn-secondary" href="#" role="button">View details »</a></p>
+      <div className="row">   
+        <div className="container">
+          <div className="row">
+{
+  this.state.shops.map((shop) => {
+    return (
+        <div className="col-md-4 md3" key = {shop.id}>
+          <div className="card" style={{width: '18rem'}}>
+            <img src= {shop.photo} height = "255" className="card-img-top" alt="..." />
+            <div className="card-body">
+              <h5 className="card-title">{shop.name}</h5>
+              <Link className="btn btn-success" to={{pathname: '/shop/'+ shop.id}}> viwe Menu
+              </Link>
+            </div>
+          </div>
+          <hr/>
         </div>
-        <div className="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a className="btn btn-secondary" href="#" role="button">View details »</a></p>
-        </div>
-        <div className="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a className="btn btn-secondary" href="#" role="button">View details »</a></p>
-        </div>
+    )
+  })
+}
+  </div>
+</div>
       </div>
       <hr />
     </div>
   </main>
-            </>
+  </>
         )
     }
 }

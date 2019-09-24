@@ -11,6 +11,7 @@ import About from './pages/About';
 import Notfound from './pages/Notfound';
 import Footer from './components/Footer';
 import Shop from './pages/Shop';
+import Register from './pages/Register';
 
 
 
@@ -25,7 +26,8 @@ function App() {
   <Switch>
     <Route exact path="/" component={Home}></Route>
   <Route path="/about" component={About}></Route>
-  <Route  path="/shop" component={Shop}></Route>
+  <Route  path="/shop/:id" component={Shop}></Route>
+  <Route  path="/register" component={Register}></Route>
 
   <Route component={Notfound}></Route>
   </Switch>

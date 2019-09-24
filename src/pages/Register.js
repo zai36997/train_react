@@ -15,7 +15,11 @@ const SignupSchema = Yup.object().shape({
     .required("password is required "),
   email: Yup.string()
     .email("Invalid email")
-    .required("email is required")
+    .required("email is required"),
+  rold: Yup.string()
+    .min(2, "Too Short!")
+    .max(50, "Too Long!")
+    .required("rold is required")
 });
 
 export default class Resgister extends Component {
@@ -26,12 +30,11 @@ export default class Resgister extends Component {
       const response = await axios.post(apiUrl, values);
       //   console.log(response.data);
       if (response.status === 201) {
-        alert("ลงทะเบียนสำเร็จ");
-      } else if (response.status === 201) {
-        alert("อีเมลซ้ำ");
+        Swal.fire("ลงทะเบียนสำเร็จ", "", "success");
+        //alert("ลงทะเบียนสำเร็จ");
       }
     } catch (error) {
-      alert(error);
+      Swal.fire("Oops...", error, "error");
     }
   };
 
@@ -46,7 +49,8 @@ export default class Resgister extends Component {
                 initialValues={{
                   name: "",
                   email: "",
-                  password: ""
+                  password: "",
+                  rold: ""
                 }}
                 validationSchema={SignupSchema}
                 onSubmit={values => {
@@ -123,6 +127,29 @@ export default class Resgister extends Component {
                       />
                       {/* {errors.password && touched.password ? (
                         <div>{errors.password}</div>
+                      ) : null} */}
+                    </div>
+
+                    <div className="form-group">
+                      <label>role</label>
+                      <Field
+                        name="rold"
+                        className={`form-control ${
+                          touched.rold
+                            ? errors.rold
+                              ? "is-invalid"
+                              : "is-valid"
+                            : ""
+                        } `}
+                        placeholder="Fullname"
+                      />
+                      <ErrorMessage
+                        name="rold"
+                        className="invalid-feedback"
+                        componnent="div"
+                      />
+                      {/* {errors.name && touched.name ? (
+                        <div>{errors.name}</div>
                       ) : null} */}
                     </div>
                     <button type="submit">Submit</button>

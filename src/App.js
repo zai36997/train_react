@@ -14,30 +14,36 @@ import Shop from "./pages/Shop";
 import Register from "./pages/Register";
 import PrivateRoute from "./guard/auth";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
-import rootReducer from "./redux/reducers/index";
+// import { createStore } from "redux";
+// import rootReducer from "./redux/reducers/index";
+import { PersistGate } from "redux-persist/integration/react";
+import configureStore from "./redux/configureStore";
+
 import Cart from "./pages/Cart";
 
 library.add(fab, fas);
 
-const store = createStore(rootReducer);
+// const store = createStore(rootReducer);
+const { store, persistor } = configureStore();
 function App() {
   return (
     <Provider store={store}>
-      <Router>
-        <Navbar />
-        <Switch>
-          <Route exact path="/" component={Home}></Route>
-          <PrivateRoute path="/about" component={About} />
-          <Route path="/shop/:id" component={Shop}></Route>
-          <Route path="/register" component={Register}></Route>
-          <Route path="/cart" component={Cart}></Route>
-          <Route component={Notfound}></Route>
-        </Switch>
-        <Footer />
+      <PersistGate loading={null} persistor={persistor}>
+        <Router>
+          <Navbar />
+          <Switch>
+            <Route exact path="/" component={Home}></Route>
+            <PrivateRoute path="/about" component={About} />
+            <Route path="/shop/:id" component={Shop}></Route>
+            <Route path="/register" component={Register}></Route>
+            <Route path="/cart" component={Cart}></Route>
+            <Route component={Notfound}></Route>
+          </Switch>
+          <Footer />
 
-        {/* <Home/> */}
-      </Router>
+          {/* <Home/> */}
+        </Router>
+      </PersistGate>
     </Provider>
   );
 }

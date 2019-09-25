@@ -14,17 +14,22 @@ import {
 import { NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./Login";
+import { connect } from "react-redux";
 
 library.add(fab, fas);
-
-export default class Navibar extends Component {
+class Navibar extends Component {
   render() {
     return (
       <>
-        <Navbar bg="dark" variant="dark">
+        <Navbar
+          class="navbar navbar-light"
+          expand="lg"
+          style={{ backgroundColor: "#7AC8F0" }}
+        >
           <Navbar.Brand href="#home">
             <FontAwesomeIcon icon={["fas", "utensils"]} /> React-Bootstrap
           </Navbar.Brand>
+
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
@@ -39,6 +44,7 @@ export default class Navibar extends Component {
               </NavLink>
               <NavLink className="nav-link" to="/cart">
                 ตะกร้าสินค้า
+                <span class="badge badge-light">{this.props.total}</span>
               </NavLink>
               <NavLink className="nav-link" to="/register">
                 Register
@@ -51,3 +57,10 @@ export default class Navibar extends Component {
     );
   }
 }
+const mapStatetoProps = state => {
+  return {
+    total: state.cartReducer.total
+  };
+};
+
+export default connect(mapStatetoProps)(Navibar);

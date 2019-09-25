@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { addToCart } from "../redux/actions/cartAction";
+// import { Link } from "react-router-dom";
 
-export default class Shop extends Component {
+class Shop extends Component {
   CancelToken = axios.CancelToken;
   source = this.CancelToken.source();
 
@@ -41,6 +43,17 @@ export default class Shop extends Component {
   componentWillUnmount() {
     this.source.cancel();
   }
+
+  addToCart = menu => {
+    const item = {
+      id: menu._id,
+      name: menu.name,
+      price: menu.price.$numberDecimal,
+      qty: 1
+    };
+    this.props.dispatch(addToCart(item, this.props.cart));
+  };
+
   render() {
     return (
       <>
@@ -58,7 +71,12 @@ export default class Shop extends Component {
                         <br />
                         ราคา {menu.price.$numberDecimal}
                         <br />
-                        <button className="btn btn-success"> ซื้อเลย </button>
+                        <button
+                          onClick={() => this.addToCart(menu)}
+                          className="btn btn-success"
+                        >
+                          ซื้อเลย
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -72,3 +90,10 @@ export default class Shop extends Component {
     );
   }
 }
+const mapStatetoProps = state => {
+  return {
+    cart: state.cartReducer.cart
+  };
+};
+
+export default connect(mapStatetoProps)(Shop);

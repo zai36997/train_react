@@ -37,6 +37,9 @@ export default class Navibar extends Component {
               <NavLink className="nav-link" to="/shop">
                 Shop
               </NavLink>
+              <NavLink className="nav-link" to="/cart">
+                ตะกร้าสินค้า
+              </NavLink>
               <NavLink className="nav-link" to="/register">
                 Register
               </NavLink>
